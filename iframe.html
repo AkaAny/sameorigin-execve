@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Iframe window</title>
+</head>
+<body>
+<div>这是iframe html</div>
+<script>
+    const iframeElement= document.createElement("iframe");
+    iframeElement.src="/execve?targetUrl=http%3A//localhost%3A7005/";
+    iframeElement.width="590px";
+    iframeElement.height="590px";
+    iframeElement.onload=function (){
+        console.log("content window:",iframeElement.contentWindow);
+        const contentDocument= iframeElement.contentWindow.document;
+        console.log("content document:",contentDocument);
+        const divElement= contentDocument.createElement("h1");
+        divElement.innerText="hook from outside of iframe";
+        contentDocument.body.appendChild(divElement);
+    }
+    document.body.appendChild(iframeElement);
+</script>
+</body>
+</html>
