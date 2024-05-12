@@ -1,0 +1,20 @@
+{
+  "name": "execve",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/babel-core": "^6.25.10",
+    "babel-core": "^5.8.38",
+    "babel-runtime": "^6.26.0",
+    "babel-types": "^6.26.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  },
+  "dependencies": {}
+}
