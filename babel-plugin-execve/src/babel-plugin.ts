@@ -1,6 +1,7 @@
-// import * as babelTypes from "babel-types"
-// import {PluginObj} from "babel-core";
-import {memberExpression} from "babel-types";
+//import * as babelTypes from "babel-types"
+//import {PluginObj,TransformOptions} from "babel-core";
+
+console.log("[execve babel plugin] load window proxy babel plugin");
 
 export function WindowProxyBabelPlugin(
     babelTypes
@@ -56,6 +57,9 @@ export function WindowProxyBabelPlugin(
                  }
             },
         },
+        post(state){
+            console.log("[execve babel plugin] state:",state);
+        }
     };
 }
 

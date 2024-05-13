@@ -8,9 +8,8 @@
   </head>
   <body>
     <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
     <script type="module">
-        import {WindowProxyBabelPlugin} from "/src/babel-plugin";
+        import {WindowProxyBabelPlugin} from "babel-plugin-execve/src/babel-plugin";
         const plugin=WindowProxyBabelPlugin(Babel.packages.types);
         export function hookWindowForCode(code){
             return new Promise((resolve,reject)=>{
@@ -18,7 +17,8 @@
                     const babelResult = Babel.transform(code, {
                         plugins: [
                             plugin,
-                        ]
+                        ],
+                        //sourceMaps:"inline",
                     });
                     resolve(babelResult);
                 }catch (e){
@@ -32,5 +32,6 @@
         //Babel.registerPlugin("window-proxy-plugin",WindowProxyBabelPlugin(Babel.packages.types));
 
     </script>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

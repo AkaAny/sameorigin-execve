@@ -1,6 +1,7 @@
 import "./proxy.ts";
+import magic from "../../babel-plugin-execve/src/magic.ts";
 
-async function execve(url:string,baseUrl:string){
+async function execve(url:string,newBaseUrl:string){
     if(!url){
         console.warn("url cannot be null");
         return;
@@ -14,7 +15,7 @@ async function execve(url:string,baseUrl:string){
     const realHtml=realDocument.getElementsByTagName("html")[0];
     //const currentHtml=realDocument.getElementsByTagName("html")[0];
     const baseElement= document.createElement("base");
-    baseElement.href=baseUrl;
+    baseElement.href=newBaseUrl;
     document.head.innerHTML=
         baseElement.outerHTML
         +"\n"+
@@ -29,6 +30,8 @@ async function execve(url:string,baseUrl:string){
 
 async function realiveScriptElements(parentNode:HTMLElement){
     const scriptElements= parentNode.getElementsByTagName("script");
+    //debugger;
+    const aliveScriptElements:HTMLScriptElement[]=[];
     for (let i = 0; i < scriptElements.length; i++) {
         const element=scriptElements[i];
         console.log("[execve] realive element:",element);
@@ -52,25 +55,34 @@ async function realiveScriptElements(parentNode:HTMLElement){
                 //@ts-ignore
                 aliveElement[pk] = element[pk];
             }catch (e){
-                console.warn("skip property:",pk,"for reason:",e);
+                //console.warn("skip property:",pk,"for reason:",e);
                 continue;
             }
         }
-        if(element.src && !element.innerText){ //src script block
+        if(element.src && !element.text){ //src script block
+            console.info("[execve] element src:",element.src);
             const hookedCode= await fetch(element.src).then((resp)=>{
                 return resp.text();
             }).then((code)=>{
+                if(code.indexOf(magic)>-1){
+                    console.log("code has been transformed");
+                    //debugger;
+                    return code;
+                }
+                //@ts-ignore
                 return window.hookWindowForCode(code);
             })
-            console.info(aliveElement.src)
             console.info(hookedCode);
-            aliveElement.innerText=hookedCode;
+            aliveElement.text=hookedCode;
         }
-
-        parentNode.removeChild(element);
-        //debugger;
-        parentNode.appendChild(aliveElement);
+        aliveScriptElements.push(aliveElement);
     }
+    for (let i = 0; i < scriptElements.length; i++) {
+        parentNode.removeChild(scriptElements[i]);
+    }
+    aliveScriptElements.forEach((aliveElement)=>{
+        parentNode.appendChild(aliveElement);
+    })
 }
 const queryStr= window.location.search;
 console.log("[execve] query str:",queryStr);

@@ -15,7 +15,7 @@ const locationProxy=new Proxy(window.location,{
 });
 
 
-const baseUrl="http://localhost:5175/execve?targetUrl=";
+const baseUrl=`${window.location.origin}/execve?targetUrl=`;
 const windowProxyAssign=Object.assign({},window.location);
 windowProxyAssign.replace=function (url){
     console.log("[proxy location] before replace to url:",url);
@@ -26,11 +26,22 @@ windowProxyAssign.replace=function (url){
     return originReplaceFunc(newUri);
 }
 
+//@ts-ignore
 const historyAssign:History=[];
+
 historyAssign.back=function (){
     const backFunc=window.history.back.bind(window.history);
     backFunc();
 }
+
+historyAssign.pushState=function (data: any, unused: string, url?: string | URL | null){
+    console.log("[proxy history] before push state:",data,unused,url);
+    const newUri=new URL(url!!,baseUrl);
+    console.log("[proxy history] actual push state url:",url);
+    const originReplaceStateFunc=window.history.pushState.bind(window.history);
+    return originReplaceStateFunc(data,unused,newUri);
+}
+
 historyAssign.replaceState=function (data: any, unused: string, url?: string | URL | null){
     console.log("[proxy history] before replace state:",data,unused,url);
     const newUri=new URL(url!!,baseUrl);
