@@ -5,10 +5,6 @@ const router=createRouter({
     history:createWebHashHistory(),
     routes:[
         {
-            path:"/",
-            redirect:"/hw",
-        },
-        {
             path:"/hw",
             component:HelloWorld,
             props: {

@@ -8,11 +8,12 @@
 <div>这是iframe html</div>
 <script>
     const iframeElement= document.createElement("iframe");
-    iframeElement.src="/execve?targetUrl=http%3A//localhost%3A7005/";
+    iframeElement.src="http://localhost:5175/execve?targetUrl=http%3A//localhost%3A7005/";
     iframeElement.width="590px";
     iframeElement.height="590px";
     iframeElement.onload=function (){
-        console.log("content window:",iframeElement.contentWindow);
+        const contentWindow=iframeElement.contentWindow;
+        console.log("content window:",contentWindow);
         const contentDocument= iframeElement.contentWindow.document;
         console.log("content document:",contentDocument);
         const divElement= contentDocument.createElement("h1");

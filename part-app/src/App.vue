@@ -1,5 +1,12 @@
 <script setup lang="ts">
+import {useRouter} from "vue-router";
 
+const router=useRouter();
+
+function showBaseUrl(){
+  console.log("location href:",location.href);
+  console.log('document base url:',document.baseURI);
+}
 </script>
 
 <template>
@@ -11,6 +18,8 @@
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
+  <button @click="router.push('/hw')">跳转到hw</button>
+  <button @click="showBaseUrl">显示base url</button>
   <router-view/>
 </template>
 
